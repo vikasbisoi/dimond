@@ -54,8 +54,8 @@ Reading Data
 read_csv() is the function in pandas which reads csv files.
 head() function is used to print first five rows of dataset.(default number of rows is 5)
 """
-#df= pd.read_csv ("diamonds-m.csv")
-#df.head()
+df= pd.read_csv ("diamonds-m.csv")
+df.head()
 
 #=====================================================================================
 """
@@ -125,3 +125,42 @@ df["clarity"].unique()
 df["clarity"].str.isalnum()
 #alpha=df["carat"].astype(str).str.isalnum()
 #print(len(alpha))
+
+
+
+
+
+#==============================================================================
+
+"""
+4 . What are precision & scale of numeric columns?
+"""
+
+
+
+
+
+
+#==============================================================================
+"""
+5 . Identify significant columns of the data set .
+"""
+
+def significant(a):
+    for i in  a:
+#    print(i)
+        if i=="id":
+            a.remove("id")
+            return(a)
+#a=list(df.columns)
+d=significant(list(df.columns))
+print("The list of significant is :",d)
+
+#==============================================================================
+"""
+6 . For each column, find out
+▪ Number of Null values
+▪ Number of zeros
+"""
+
+
