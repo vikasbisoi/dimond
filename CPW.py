@@ -154,7 +154,7 @@ def significant(a):
             return(a)
 #a=list(df.columns)
 d=significant(list(df.columns))
-print("The list of significant columns is :",d)
+print("The list of significant columns are :",d)
 
 #==============================================================================
 """
