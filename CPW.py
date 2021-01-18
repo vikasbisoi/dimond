@@ -100,6 +100,13 @@ print(df.dtypes)
 
 
 """
+
+for column in df.columns:
+    if df[column].dtype == 'object':
+        print(column ,": ", df[column].str.len().max())
+#=============================================================================
+#optional
+
 df.columns
 
 df["cut_alp"]=map(lambda x: x.isalnum(),df["cut"] ).sum()
