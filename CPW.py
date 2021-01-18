@@ -257,9 +257,27 @@ print(s)
     
 grp=df.count()
 grp
+#==============================================================================
+"""
+8 . For each numeric column
+▪ Replace null values with median value of the column .
+"""
+
+
+#==============================================================================
+"""
+9 . For each numeric column
+▪ Replace zero values with suitable statistical value of the column . \
+    Give reason why
+"""
+
 
 #==============================================================================
 #Q10
+"""
+10. For each numeric column
+▪ Provide the quartile summary along with the cout , mean & sum
+"""
 print("Mean of all the numeric columns:")
 for column in df.columns:
     if(df[column].dtype!=object):
@@ -280,6 +298,10 @@ df.quantile([0.25,0.50,0.75])
 
 #==============================================================================
 #Q11
+"""
+11. For each numeric column
+▪ Provide the range, variance and standard deviation
+"""
 print("variance of all the numeric columns:")
 for column in df.columns:
     if(df[column].dtype!=object):
@@ -302,6 +324,10 @@ print("======================================================================")
 
 #==============================================================================
 #Q12
+"""
+12. For each numeric column
+▪ Provide the count of outliers and their value
+"""
 print("IQR of all the numeric columns:")
 for column in df.columns:
     if(df[column].dtype!=object):
@@ -322,3 +348,67 @@ for column in df.columns:
         print("###############################################")
              
 df.head()
+
+
+#=============================================================================
+"""
+13. Are there any class or categoric variables? If yes ,
+▪ provide frequency distribution table & chart for the same
+"""
+
+
+
+#=============================================================================
+
+"""
+14. For all numeric columns
+▪ Provide histogram
+"""
+
+plt.figure(figsize=(10,10))
+df.hist(sharey=True,align="mid")
+plt.tight_layout()
+plt.show()
+
+
+#==============================================================================
+
+"""
+15. For all numeric variables
+▪ Provide box & whisker plot
+"""
+plt.figure()
+sb.boxplot(data=df,orient="h")
+plt.show()
+
+
+plt.figure()
+sb.boxplot(x=df["carat"],data=df)
+plt.show()
+#==============================================================================
+"""
+16. For all numeric variables
+▪ Provide correlation table & graph
+"""
+corr=df.corr()
+print(corr)
+plt.figure()
+sb.heatmap(corr,vmax=1.,annot=True,linecolor="black",linewidth=0.5)
+plt.show()
+#==============================================================================
+"""
+17. Prepare relationship chart showing relation of each numeric
+column with all other numeric columns .
+"""
+
+
+
+
+#==============================================================================
+"""
+18. Find out the difference between the Actual Depth & Ideal Depth .
+"""
+
+
+
+
