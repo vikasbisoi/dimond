@@ -147,6 +147,7 @@ df["clarity"].str.isalnum()
 """
 
 def significant(a):
+    """The function return the number of significant columns """
     for i in  a:
 #    print(i)
         if i=="id":
@@ -155,12 +156,142 @@ def significant(a):
 #a=list(df.columns)
 d=significant(list(df.columns))
 print("The list of significant columns are :",d)
-
+#==============================================================================
+#Output
+#The list of significant columns are :
+#['carat', 'cut', 'color', 'clarity', 'popularity', 'depth', 'table', 'price',
+# 'x', 'y', 'z']
 #==============================================================================
 """
 6 . For each column, find out
 ▪ Number of Null values
 ▪ Number of zeros
 """
+def nullvalues(dataset):
+    """The function returns the number of null values """
+    nl=dataset.isnull().sum()
+    return nl
+null=nullvalues(df)
+print(null)    
+#=============================================================================
+#Output
+#Columns  No. of Null values
+#id             0
+#carat          2
+#cut            0
+#color          3
+#clarity        0
+#popularity    10
+#depth          0
+#table          0
+#price          4
+#x              0
+#y              0
+#z              0
+#==============================================================================
+
+def zerovalues(dataset):
+    """The function returns the number of zeros in dataset  """
+    ze=dataset.isin([0]).sum()
+    return ze
+zero=zerovalues(df)
+print(zero)
+#==============================================================================
+#columns    No. of zeros in dataset
+#id             0
+#carat          0
+#cut            0
+#color          0
+#clarity        0
+#popularity     0
+#depth          0
+#table          0
+#price          0
+#x              8
+#y              7
+#z             20
+#==============================================================================
 
 
+##Optional
+def nullzero(dataset):
+    """The function returns the number of zeros in dataset  """
+    nl=dataset.isnull().sum()
+    #nl=pd.DataFrame(nl)
+    ze=dataset.isin([0]).sum()
+    #ze=pd.DataFrame(ze)
+    return nl,ze
+zero=nullzero(df)
+zero=pd.DataFrame(zero)
+values=["Null","Zeros"]
+zero["values"]=values
+print(zero.set_index("values"))
+#==============================================================================
+#Output
+#        id  carat  cut  color  clarity  popularity  depth  table  price  x  y   z
+#values                                                                          
+#Null     0      2    0      3        0          10      0      0      4  0  0   0
+#Zeros    0      0    0      0        0           0      0      0      0  8  7   20
+#==============================================================================
+
+"""
+7 . For each column
+▪ Provide the obvious errors
+"""
+s=[]
+for i in  df.columns:
+    if df.columns.dtype==object:
+        s.append(i) 
+print(s)    
+    
+    
+    
+    
+    
+grp=df.count()
+grp
+
+#==============================================================================
+#Q10
+print("Mean of all the numeric columns:")
+for column in df.columns:
+    if(df[column].dtype!=object):
+        print(column,":",df[column].mean())
+        
+print("Count of all the numeric columns:")
+for column in df.columns:
+    if(df[column].dtype!=object):
+        print(column,":",df[column].count())
+        
+print("Sum of all the numeric columns:")
+for column in df.columns:
+    if(df[column].dtype!=object):
+        print(column,":",df[column].sum())
+        
+print("The quartile summary of each column are:")
+df.quantile([0.25,0.50,0.75])
+
+#==============================================================================
+#Q11
+print("variance of all the numeric columns:")
+for column in df.columns:
+    if(df[column].dtype!=object):
+        print(column,":",df[column].var())
+        
+print("======================================================================")
+print("Standard deviation of all the numeric columns:")
+for column in df.columns:
+    if(df[column].dtype!=object):
+        print(column,":",df[column].std())
+print("======================================================================")        
+for column in df.columns:
+    if(df[column].dtype!=object):
+        print("Maximum value of column",column,":",df[column].max())
+        print("Minimum value of column",column,":",df[column].min())
+        print("Range of column",column,":",df[column].max()-df[column].min())
+print("======================================================================") 
+
+
+
+#==============================================================================
+       
