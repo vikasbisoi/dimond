@@ -247,7 +247,7 @@ print(zero.set_index("values"))
 """
 s=[]
 for i in  df.columns:
-    if df.columns.dtype==object:
+    if (df.columns).dtype==object:
         s.append(i) 
 print(s)    
     
@@ -301,4 +301,24 @@ print("======================================================================")
 
 
 #==============================================================================
-       
+#Q12
+print("IQR of all the numeric columns:")
+for column in df.columns:
+    if(df[column].dtype!=object):
+        q1, q3= np.percentile(df[column],[25,75])
+        iqr = q3 - q1
+        lower_bound = q1 -(1.5 * iqr)
+        upper_bound = q3 +(1.5 * iqr)
+        print("Interquartile range of column",column,":",iqr)
+        print("Lower bound of column ",column,":",lower_bound)
+        print("Upper bound of column ",column,":",upper_bound)
+        outlier=[]
+        for i in (df[column]):
+          if lower_bound<i>upper_bound:
+               outlier.append(i)
+        print("Outliers are:",outlier)
+        if not outlier:
+          print("No Outlier Present")
+        print("###############################################")
+             
+df.head()
