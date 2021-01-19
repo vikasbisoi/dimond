@@ -65,10 +65,17 @@ for column in df.columns:
         print("Upper bound of column ",column,";",upper_bound)
         outlier=[]
         for i in (df[column]):
-          if lower_bound<i and i>upper_bound:
+          if lower_bound>i:
+               outlier.append(i)
+          if upper_bound<i:
                outlier.append(i)
         print("Outliers are:",outlier)
         if not outlier:
           print("No Outlier Present")
         print("###############################################")
-             
+df.head()
+
+
+plt.figure()
+df.boxplot(column="table")
+plt.show()
