@@ -14,6 +14,7 @@ import pandas as pd
 import numpy as np
 import seaborn as sb
 import matplotlib.pyplot as plt
+import networkx as nx
 #======================================================================================
 """
 Setting Maximum option for columns to see all the columns in outputs.
@@ -254,7 +255,6 @@ print(s)
     
     
     
-    
 grp=df.count()
 grp
 #==============================================================================
@@ -262,8 +262,17 @@ grp
 8 . For each numeric column
 ▪ Replace null values with median value of the column .
 """
+#Q8
+print("=================================================================================")
+for column in df.columns:
+    if df[column].dtype!=object:
+        if column!='id':
+            print("number of null vallues in column",column,":",df[column].isnull().sum())
+            df[column]=df[column].fillna(df[column].median())
+print("=================================================================================")
 
 
+df.isnull().sum()
 #==============================================================================
 """
 9 . For each numeric column
@@ -393,15 +402,38 @@ plt.show()
 corr=df.corr()
 print(corr)
 plt.figure()
-sb.heatmap(corr,vmax=1.,annot=True,linecolor="black",linewidth=0.5)
+sb.heatmap(corr,vmax=1,annot=True,linecolor="black",linewidth=0.5)
 plt.show()
 #==============================================================================
 """
 17. Prepare relationship chart showing relation of each numeric
 column with all other numeric columns .
 """
+#df_relation=corr.astype(int)
+#print(df_relation)
+
+r= df[df[column] == 53940]
+edges = []
+for idx, rr in r.iterrows():  
+        edges.append((rr['Object'], rr['AttributeName']))
+
+#edges=df.columns
+g=nx.DiGraph()
+g.add_edges_from((edges))
+plt.figure()
+nx.draw(g,with_labels=True,node_size=5000,font_size=10)
+plt.show()
+
+#first try
+#edges=df.columns
+g=nx.DiGraph()
+g.add_edges_from((edges))
+plt.figure()
+nx.draw(g,with_labels=True,node_size=20,font_size=10)
+plt.show()
 
 
+df.shape
 
 
 #==============================================================================
