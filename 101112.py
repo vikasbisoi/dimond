@@ -15,42 +15,52 @@ df=pd.read_csv("D:/diamonds-m.csv")
 
 #########################################################################################################
 #Q10
+
+print("====================================================================")
 print("Mean of all the numeric columns:")
 for column in df.columns:
     if(df[column].dtype!=object):
         print(column,":",df[column].mean())
-        
+
+print("====================================================================")        
 print("Count of all the numeric columns:")
 for column in df.columns:
     if(df[column].dtype!=object):
         print(column,":",df[column].count())
-        
+
+print("====================================================================")        
 print("Sum of all the numeric columns:")
 for column in df.columns:
     if(df[column].dtype!=object):
         print(column,":",df[column].sum())
-        
+
+print("====================================================================")        
 print("The quartile summary of each column are:")
 df.quantile([0.25,0.50,0.75])
+
 #########################################################################################################
 #Q11
+
+print("====================================================================")
 print("variance of all the numeric columns:")
 for column in df.columns:
     if(df[column].dtype!=object):
         print(column,":",df[column].var())
-        
-
+print("====================================================================")
 print("Standard deviation of all the numeric columns:")
 for column in df.columns:
     if(df[column].dtype!=object):
         print(column,":",df[column].std())
-        
+
+print("====================================================================")        
 for column in df.columns:
     if(df[column].dtype!=object):
         print("Maximum value of column",column,":",df[column].max())
         print("Minimum value of column",column,":",df[column].min())
         print("Range of column",column,":",df[column].max()-df[column].min())
         print("#############################################################")
+
+print("====================================================================")
 ##########################################################################################################
 #Q12
 print("================================================================================")
@@ -95,7 +105,8 @@ for column in df.columns:
         if column!='id':
             print("number of null vallues in column",column,":",df[column].isnull().sum())
             df[column]=df[column].fillna(df[column].median())
+            print("number of null vallues in column",column," after replacing it with median:",df[column].isnull().sum())
+            print("----------------------------------------------------------------------------")
 print("=================================================================================")
-################################################################################################################
-
-
+###############################################################################################################
+df.isnull().sum()
