@@ -269,10 +269,11 @@ for column in df.columns:
         if column!='id':
             print("number of null vallues in column",column,":",df[column].isnull().sum())
             df[column]=df[column].fillna(df[column].median())
+            print("number of null vallues in column",column," after replacing it with median:",df[column].isnull().sum())
+            print("----------------------------------------------------------------------------")
 print("=================================================================================")
 
 
-df.isnull().sum()
 #==============================================================================
 """
 9 . For each numeric column
@@ -412,11 +413,11 @@ column with all other numeric columns .
 #df_relation=corr.astype(int)
 #print(df_relation)
 
-r= df[df[column] == 53940]
+r= df[df['Object'] == 53940]
 edges = []
 for idx, rr in r.iterrows():  
         edges.append((rr['Object'], rr['AttributeName']))
-
+print(edges)
 #edges=df.columns
 g=nx.DiGraph()
 g.add_edges_from((edges))
@@ -425,7 +426,7 @@ nx.draw(g,with_labels=True,node_size=5000,font_size=10)
 plt.show()
 
 #first try
-#edges=df.columns
+edges=df.columns
 g=nx.DiGraph()
 g.add_edges_from((edges))
 plt.figure()
@@ -436,10 +437,81 @@ plt.show()
 df.shape
 
 
+
+
+
+#Rohit code
+# here we create a empty list and append all the numeric columns in it
+column_name5 = []
+for column in list (df.columns):
+    if df[column].dtype == 'float':
+        column_name5.append(column)
+        print(column)
+df_new5 = df[column_name5]
+print(df_new5.head())
+    
+
+# correalation (heat map)
+#draws  heatmap with input as the correlation matrix calculted by(new_df.corr())
+ #cmap – a matplotlib colormap name or object.
+ #annot – an array of same shape as data which is used to annotate the heatmap.
+ # annonate - to add notes to a book or text, giving explanations or comments
+
+
+
+plt.figure() 
+sb.heatmap(df_new5.corr(),annot=True,cmap='cubehelix_r') 
+plt.show()
+#==============================================================================
+
 #==============================================================================
 """
 18. Find out the difference between the Actual Depth & Ideal Depth .
 """
+print(df.head())
+# y = width
+#z = depth
+
+
+#(To find the depth percentage
+# divide the diamond's physical depth measurement by its width.
+# Also, depth is deemed acceptable within a certain range, 
+# with any value between 56.5 and 65 percent considered good. However,
+# the ideal depth is between 62.9 and 59.5 percent.)
+
+
+
+
+#  For a round diamond, an ideal depth percentage is between 59 and 62.6 
+# percent This very nice 1.30-carat round cut, for example, has a depth of 61.8%
+
+
+Width_of_Diamond = df.iloc[:,10]
+print(Width_of_Diamond)
+Depth_of_Diamond = df.iloc[:,11]
+print(Depth_of_Diamond)
+
+
+percentage = (Depth_of_Diamond/Width_of_Diamond)*100
+print(percentage)
+
+
+
+list67 = []
+list69 = []
+for i in percentage:
+    if 56.5<= i <=65:
+        list67.append(i)
+for j in percentage:
+    if 59.5<= j <=62.9:
+        list69.append(j)
+
+TA = len(list67)
+TI = len(list69)
+hh = (TA/df.shape[0])*100
+print("Percentage of Actual is :",hh)
+tt = (TI/df.shape[0])*100
+print("Percentage of ideal is :",tt)
 
 
 
