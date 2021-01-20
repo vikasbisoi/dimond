@@ -67,8 +67,6 @@ shape () function returs the number of rows and columns in dataset.
 print("The Strucure of the dataset is:",df.shape)
 
 #=====================================================================================
-#Output
-#The Strucure of the dataset is: (53940, 12)
 
 #=====================================================================================
 """
@@ -80,20 +78,6 @@ dataset.
 print(df.dtypes)
 
 #=====================================================================================
-#Output
-#   Column      Data types 
-#   id              int64
-#   carat         float64
-#   cut            object
-#   color          object
-#   clarity        object
-#   popularity     object
-#   depth         float64
-#   table         float64
-#   price         float64
-#   x             float64
-#   y             float64
-#   z             float64
 #=====================================================================================
 
 """
@@ -106,37 +90,6 @@ for column in df.columns:
     if df[column].dtype == 'object':
         print(column ,": ", df[column].str.len().max())
 #=============================================================================
-#optional
-
-df.columns
-
-df["cut_alp"]=map(lambda x: x.isalnum(),df["cut"] ).sum()
-print(df["cut_alp"])
-
-
-df["clarity_alp"]=map(lambda x: x.isalnum(),df["clarity"] )
-print(df)
-
-
-print(len(df["clarity"].str.isalnum()))
-
-df["cut"].unique()
-df["cut"].str.isalnum()
-
-df["color"].unique()
-df["color"].str.isalnum()
-
-df["popularity"].unique()
-df["popularity"].str.isalnum()
-
-df["clarity"].unique()
-df["clarity"].str.isalnum()
-#alpha=df["carat"].astype(str).str.isalnum()
-#print(len(alpha))
-
-
-
-
 
 #==============================================================================
 
@@ -165,10 +118,6 @@ def significant(a):
 d=significant(list(df.columns))
 print("The list of significant columns are :",d)
 #==============================================================================
-#Output
-#The list of significant columns are :
-#['carat', 'cut', 'color', 'clarity', 'popularity', 'depth', 'table', 'price',
-# 'x', 'y', 'z']
 #==============================================================================
 """
 6 . For each column, find out
@@ -182,20 +131,6 @@ def nullvalues(dataset):
 null=nullvalues(df)
 print(null)    
 #=============================================================================
-#Output
-#Columns  No. of Null values
-#id             0
-#carat          2
-#cut            0
-#color          3
-#clarity        0
-#popularity    10
-#depth          0
-#table          0
-#price          4
-#x              0
-#y              0
-#z              0
 #==============================================================================
 
 def zerovalues(dataset):
@@ -205,19 +140,6 @@ def zerovalues(dataset):
 zero=zerovalues(df)
 print(zero)
 #==============================================================================
-#columns    No. of zeros in dataset
-#id             0
-#carat          0
-#cut            0
-#color          0
-#clarity        0
-#popularity     0
-#depth          0
-#table          0
-#price          0
-#x              8
-#y              7
-#z             20
 #==============================================================================
 
 
@@ -235,43 +157,35 @@ values=["Null","Zeros"]
 zero["values"]=values
 print(zero.set_index("values"))
 #==============================================================================
-#Output
-#        id  carat  cut  color  clarity  popularity  depth  table  price  x  y   z
-#values                                                                          
-#Null     0      2    0      3        0          10      0      0      4  0  0   0
-#Zeros    0      0    0      0        0           0      0      0      0  8  7   20
 #==============================================================================
 
 """
 7 . For each column
 ▪ Provide the obvious errors
 """
-s=[]
-for i in  df.columns:
-    if (df.columns).dtype==object:
-        s.append(i) 
-print(s)    
-    
-    
-    
-    
-grp=df.count()
-grp
+
+
+
+
+
+
+
+
 #==============================================================================
 """
 8 . For each numeric column
 ▪ Replace null values with median value of the column .
 """
 #Q8
-print("=================================================================================")
+print("========================================================================")
 for column in df.columns:
     if df[column].dtype!=object:
         if column!='id':
-            print("number of null vallues in column",column,":",df[column].isnull().sum())
+            print("number of null vallues in column",column,":",
+                  df[column].isnull().sum())
             df[column]=df[column].fillna(df[column].median())
             print("number of null vallues in column",column," after replacing it with median:",df[column].isnull().sum())
-            print("----------------------------------------------------------------------------")
-print("=================================================================================")
+            print("------------------------------------------------------------")
 
 
 #==============================================================================
@@ -355,7 +269,7 @@ for column in df.columns:
         print("Outliers are:",outlier)
         if not outlier:
           print("No Outlier Present")
-        print("###############################################")
+        print("---------------------------------------------------------------")
              
 df.head()
 
@@ -392,9 +306,6 @@ sb.boxplot(data=df,orient="h")
 plt.show()
 
 
-plt.figure()
-sb.boxplot(x=df["carat"],data=df)
-plt.show()
 #==============================================================================
 """
 16. For all numeric variables
@@ -412,17 +323,18 @@ column with all other numeric columns .
 """
 #df_relation=corr.astype(int)
 #print(df_relation)
-
-r= df[df['Object'] == 53940]
+columns=df.columns
+print(columns)
+r= df[df["Object"] == 14852]
 edges = []
 for idx, rr in r.iterrows():  
-        edges.append((rr['Object'], rr['AttributeName']))
+        edges.append((rr["Object"], rr["AttributeName"]))
 print(edges)
 #edges=df.columns
 g=nx.DiGraph()
 g.add_edges_from((edges))
 plt.figure()
-nx.draw(g,with_labels=True,node_size=5000,font_size=10)
+nx.draw_circular(g,with_labels=True,node_size=5000,font_size=10)
 plt.show()
 
 #first try
@@ -433,35 +345,42 @@ plt.figure()
 nx.draw(g,with_labels=True,node_size=20,font_size=10)
 plt.show()
 
+#Second try
+columns=df.columns
+#print(columns)
+plt.figure()
+len_of_list=len(columns)
 
-df.shape
-
-
-
-
-
-#Rohit code
-# here we create a empty list and append all the numeric columns in it
-column_name5 = []
-for column in list (df.columns):
-    if df[column].dtype == 'float':
-        column_name5.append(column)
-        print(column)
-df_new5 = df[column_name5]
-print(df_new5.head())
-    
-
-# correalation (heat map)
-#draws  heatmap with input as the correlation matrix calculted by(new_df.corr())
- #cmap – a matplotlib colormap name or object.
- #annot – an array of same shape as data which is used to annotate the heatmap.
- # annonate - to add notes to a book or text, giving explanations or comments
-
-
-
-plt.figure() 
-sb.heatmap(df_new5.corr(),annot=True,cmap='cubehelix_r') 
+g=nx.Graph()
+g.add_nodes_from([2,3])
+#g.add_edge()
+nx.draw_circular(g,with_labels=True)
+print(nx.info(g))
 plt.show()
+#g.add_nodes_from([columns])
+#g=nx.path_graph(corr)
+#g=nx.complete_graph(corr)
+#g=nx.gnp_random_graph(corr,0.5)
+edges=df.columns
+
+"""----------------------------------------------------------------------- """
+#final_try1
+g=nx.DiGraph(corr)
+plt.figure(figsize=(10,10))
+nx.draw(g,with_labels=True,node_size=500,font_size=40)
+plt.show()
+"""----------------------------------------------------------------------- """
+#final_try2
+g=nx.DiGraph(corr)
+plt.figure(figsize=(10,10))
+nx.draw_circular(g,with_labels=True,node_size=500,font_size=40)
+plt.show()
+
+"""----------------------------------------------------------------------- """
+
+
+
+
 #==============================================================================
 
 #==============================================================================
