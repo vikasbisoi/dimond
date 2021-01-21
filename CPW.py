@@ -279,8 +279,12 @@ df.head()
 13. Are there any class or categoric variables? If yes ,
 ▪ provide frequency distribution table & chart for the same
 """
-
-
+cat=pd.Categorical(df["cut"],dtype="category")
+print(cat)
+plt.figure()
+plt.hist(cat)
+plt.show()
+df.head()
 
 #=============================================================================
 
@@ -387,23 +391,30 @@ plt.show()
 """
 18. Find out the difference between the Actual Depth & Ideal Depth .
 """
+
+
+
+
+
+
+
+#rohit_code 
 print(df.head())
 # y = width
 #z = depth
 
 
-#(To find the depth percentage
-# divide the diamond's physical depth measurement by its width.
-# Also, depth is deemed acceptable within a certain range, 
-# with any value between 56.5 and 65 percent considered good. However,
-# the ideal depth is between 62.9 and 59.5 percent.)
-
-
-
-
-#  For a round diamond, an ideal depth percentage is between 59 and 62.6 
-# percent This very nice 1.30-carat round cut, for example, has a depth of 61.8%
-
+""" To find the depth percentage
+ divide the diamond's physical depth measurement by its width.
+ Also, depth is deemed acceptable within a certain range, 
+ with any value between 56.5 and 65 percent considered good. However,
+ the ideal depth is between 62.9 and 59.5 percent.)
+"""
+"""
+For a round diamond, an ideal depth percentage is between 59 and 62.6 
+percent This very nice 1.30-carat round cut, for example,
+ has a depth of 61.8%
+"""
 
 Width_of_Diamond = df.iloc[:,10]
 print(Width_of_Diamond)
@@ -424,6 +435,8 @@ for i in percentage:
 for j in percentage:
     if 59.5<= j <=62.9:
         list69.append(j)
+#print(list67)
+#print(list69)
 
 TA = len(list67)
 TI = len(list69)
