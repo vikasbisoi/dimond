@@ -97,11 +97,48 @@ for column in df.columns:
 4 . What are precision & scale of numeric columns?
 """
 
+import math
+def precision_and_scale(x):
+    max_digits = 14
+    int_part = int(abs(x))
+    magnitude = 1 if int_part == 0 else int(math.log10(int_part)) + 1
+    if magnitude >= max_digits:
+        return (magnitude, 0)
+    frac_part = abs(x) - int_part
+    multiplier = 10 ** (max_digits - magnitude)
+    frac_digits = multiplier + int(multiplier * frac_part + 0.5)
+    while frac_digits % 10 == 0:
+        frac_digits /= 10
+    scale = int(math.log10(frac_digits))
+    return (magnitude + scale, scale)
+
+for column in list(df.select_dtypes(include='float64').columns):
+    print(column)
+    new_list = []
+    for x in range(len(df[column])-1):
+        if not math.isnan(df[column][x]):
+            new_list.append(precision_and_scale(df[column][x]))
+    print(new_list)
 
 
+#----------------------------rohit code---------------------------------------
+#precision
+def precision(x):
+    for i in x:
+       j=str((i))
+       print((len(j)-1))
 
-
-
+#scale
+def scale(y):
+   for i in y:      
+       r = int(i)
+       e = str(r)
+       v = len(e)
+       c = str(i)
+       b = (len(c)-(v+1))
+       print(b)
+precision(df.iloc[:,1])
+df.tail()
 #==============================================================================
 """
 5 . Identify significant columns of the data set .
@@ -165,6 +202,16 @@ print(zero.set_index("values"))
 """
 
 
+#by output we have 4 cols of object i.e  cut, color, clarity, popularity
+print(df.groupby(["cut"]).count())#it gives "unknown"
+print(df.groupby(["popularity"]).count())  # it gives "NotAvail"
+
+
+
+# check for numerical value
+df.isin([0]).sum()
+#  as we know that x y z is length width and depth of diamond
+#   and by output its given zero but length width and depth cannot be zero
 
 
 
@@ -325,48 +372,6 @@ plt.show()
 17. Prepare relationship chart showing relation of each numeric
 column with all other numeric columns .
 """
-#df_relation=corr.astype(int)
-#print(df_relation)
-columns=df.columns
-print(columns)
-r= df[df["Object"] == 14852]
-edges = []
-for idx, rr in r.iterrows():  
-        edges.append((rr["Object"], rr["AttributeName"]))
-print(edges)
-#edges=df.columns
-g=nx.DiGraph()
-g.add_edges_from((edges))
-plt.figure()
-nx.draw_circular(g,with_labels=True,node_size=5000,font_size=10)
-plt.show()
-
-#first try
-edges=df.columns
-g=nx.DiGraph()
-g.add_edges_from((edges))
-plt.figure()
-nx.draw(g,with_labels=True,node_size=20,font_size=10)
-plt.show()
-
-#Second try
-columns=df.columns
-#print(columns)
-plt.figure()
-len_of_list=len(columns)
-
-g=nx.Graph()
-g.add_nodes_from([2,3])
-#g.add_edge()
-nx.draw_circular(g,with_labels=True)
-print(nx.info(g))
-plt.show()
-#g.add_nodes_from([columns])
-#g=nx.path_graph(corr)
-#g=nx.complete_graph(corr)
-#g=nx.gnp_random_graph(corr,0.5)
-edges=df.columns
-
 """----------------------------------------------------------------------- """
 #final_try1
 g=nx.DiGraph(corr)
@@ -381,9 +386,13 @@ nx.draw_circular(g,with_labels=True,node_size=500,font_size=40)
 plt.show()
 
 """----------------------------------------------------------------------- """
-
-
-
+plt.figure()
+sb.pairplot(df)
+plt.show()
+"""----------------------------------------------------------------------- """
+plt.figure()
+sb.clustermap(corr,annot=True)
+plt.show()
 
 #==============================================================================
 
@@ -391,8 +400,6 @@ plt.show()
 """
 18. Find out the difference between the Actual Depth & Ideal Depth .
 """
-
-
 
 
 
