@@ -10,6 +10,8 @@ import numpy as np
 import seaborn as sb
 import matplotlib.pyplot as plt
 import numpy as np
+ 
+
 
 df=pd.read_csv("D:/diamonds-m.csv")
  
@@ -111,9 +113,9 @@ print("=========================================================================
 ###############################################################################################################
 #Q18
 print("=================================================================================")
-m=(np.mean(df.x)+np.mean(df.y))/2
+df["x+y"]=((df.x)+(df.y))/2
 
-df["ideal_depth"]=df.z/m
+df["ideal_depth"]=df.z/df['x+y']
 
 
 df["Difference"]=df["depth"]-df["ideal_depth"]
@@ -127,3 +129,28 @@ for colName in df.columns:
     if  df[colName].dtype == 'object':
         print("Unique values in",colName,"\n",df[colName].unique())        
 print("=================================================================================")
+
+###############################################################################################################
+#fileimporting
+import tkinter as tk
+from tkinter import filedialog
+ 
+def UploadAction(event=None):
+    path = filedialog.askopenfilename()
+    print('Selected:', path )
+    if path.endswith(".csv"):
+        df= pd.read_csv(path) 
+        print(df.head())
+    elif path.endswith(".xlsx"):
+        df= pd.read_excel(path) 
+        print(df.head())
+    elif path.endswith(".txt"):
+        df= pd.read(path) 
+        print(df.head())
+
+root = tk.Tk()
+button = tk.Button(root, text='Open', command=UploadAction)
+button.pack()
+
+root.mainloop()
+##########################################################################################################
