@@ -120,3 +120,10 @@ df["Difference"]=df["depth"]-df["ideal_depth"]
 print(df["Difference"])
 print("=================================================================================")
 ################################################################################################################
+print("=================================================================================")
+print("\n-----Obvious Errors-----")
+pd.options.display.float_format = '{:,.2f}'.format
+for colName in df.columns:
+    if  df[colName].dtype == 'object':
+        print("Unique values in",colName,"\n",df[colName].unique())        
+print("=================================================================================")
