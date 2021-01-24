@@ -9,19 +9,22 @@ Importing Libraries.
 Pandas for reading data files.
 Numpy for calculating statistical values.
 Seaborn and Matplotlib for data visualization.
+tkinter GUI library.
 """
 import pandas as pd
 import numpy as np
 import seaborn as sb
 import matplotlib.pyplot as plt
-import networkx as nx
-#======================================================================================
+import tkinter as tk
+from tkinter import filedialog
+import math
+#==============================================================================
 """
 Setting Maximum option for columns to see all the columns in outputs.
 """
 pd.set_option("display.max_columns",None)
 
-#======================================================================================
+#==============================================================================
 """
 Taking input from user.
 Asking user to give loction of data file with extension.
@@ -33,7 +36,8 @@ path=input("Enter The Path of your dataset with extension:")
 path=path.replace("\\","/")
 #print(str(path))
 """
-Applying conditions where data file with specific extension can be open or print. 
+Applying conditions where data file with specific extension can be open 
+or print. 
 """
 if path.endswith(".csv"):
     df= pd.read_csv(path) 
@@ -46,59 +50,88 @@ elif path.endswith(".txt"):
     print(df.head())
 
 
+ 
+def UploadAction(event=None):
+    path = filedialog.askopenfilename()
+    print('Selected:', path )
+    if path.endswith(".csv"):
+        df= pd.read_csv(path) 
+        print(df.head())
+    elif path.endswith(".xlsx"):
+        df= pd.read_excel(path) 
+        print(df.head())
+    elif path.endswith(".txt"):
+        df= pd.read(path) 
+        print(df.head())
 
+root = tk.Tk()
+button = tk.Button(root, text='Open', command=UploadAction)
+button.pack()
+
+root.mainloop()
 
     
-#======================================================================================
+#==============================================================================
 """
 Reading Data
 read_csv() is the function in pandas which reads csv files.
-head() function is used to print first five rows of dataset.(default number of rows is 5)
+head() function is used to print first five rows of dataset.
+(default number of rows is 5)
 """
 df= pd.read_csv ("diamonds-m.csv")
 df.head()
 
-#=====================================================================================
+#==============================================================================
 """
 1. What is structure of the dataset.
-
 shape () function returs the number of rows and columns in dataset.
 """
-print("The Strucure of the dataset is:",df.shape)
+def shape_of_dataset(dataset):
+    """The Function returns the shape of the dataset
+    i.e the structure of dataset"""
+    sh=dataset.shape
+    return sh
+shape=shape_of_dataset(df)
+print("The Strucure of the dataset is:",shape)    
 
-#=====================================================================================
-
-#=====================================================================================
+#==============================================================================
 """
 2 . What are the data type of each columns?
-
-dtypes is the function in python which returns the data types of all thr columns in the 
-dataset.
+dtypes is the function in python which returns the data types of 
+all thr columns in the dataset.
 """
-print(df.dtypes)
+#print(df.dtypes)
 
-#=====================================================================================
+def data_types(dataset):
+    """The Functions returns the data type of the columns """
+    dt=dataset.dtypes
+    return dt
+datatype=data_types(df)
+print(datatype)
+
 #=====================================================================================
 
 """
 3 . What is the length of alpha numeric columns ?
-
-
 """
 
-for column in df.columns:
-    if df[column].dtype == 'object':
-        print(column ,": ", df[column].str.len().max())
-#=============================================================================
+def alpha_numeric_columns(dataset):
+    """The functions returns the length of alpha numeric 
+    columns"""
+    for column in dataset.columns:
+        if dataset[column].dtype == 'object':
+            print(column ,": ", dataset[column].str.len().max())
+alphanum=alpha_numeric_columns(df)
 
-#==============================================================================
+#=============================================================================
 
 """
 4 . What are precision & scale of numeric columns?
 """
 
-import math
 def precision_and_scale(x):
+    """The functions returns the precision and scale of 
+    numeric columns"""
     max_digits = 14
     int_part = int(abs(x))
     magnitude = 1 if int_part == 0 else int(math.log10(int_part)) + 1
@@ -120,25 +153,6 @@ for column in list(df.select_dtypes(include='float64').columns):
             new_list.append(precision_and_scale(df[column][x]))
     print(new_list)
 
-
-#----------------------------rohit code---------------------------------------
-#precision
-def precision(x):
-    for i in x:
-       j=str((i))
-       print((len(j)-1))
-
-#scale
-def scale(y):
-   for i in y:      
-       r = int(i)
-       e = str(r)
-       v = len(e)
-       c = str(i)
-       b = (len(c)-(v+1))
-       print(b)
-precision(df.iloc[:,1])
-df.tail()
 #==============================================================================
 """
 5 . Identify significant columns of the data set .
@@ -155,7 +169,6 @@ def significant(a):
 d=significant(list(df.columns))
 print("The list of significant columns are :",d)
 #==============================================================================
-#==============================================================================
 """
 6 . For each column, find out
 ▪ Number of Null values
@@ -167,8 +180,6 @@ def nullvalues(dataset):
     return nl
 null=nullvalues(df)
 print(null)    
-#=============================================================================
-#==============================================================================
 
 def zerovalues(dataset):
     """The function returns the number of zeros in dataset  """
@@ -177,63 +188,38 @@ def zerovalues(dataset):
 zero=zerovalues(df)
 print(zero)
 #==============================================================================
-#==============================================================================
-
-
-##Optional
-def nullzero(dataset):
-    """The function returns the number of zeros in dataset  """
-    nl=dataset.isnull().sum()
-    #nl=pd.DataFrame(nl)
-    ze=dataset.isin([0]).sum()
-    #ze=pd.DataFrame(ze)
-    return nl,ze
-zero=nullzero(df)
-zero=pd.DataFrame(zero)
-values=["Null","Zeros"]
-zero["values"]=values
-print(zero.set_index("values"))
-#==============================================================================
-#==============================================================================
 
 """
 7 . For each column
 ▪ Provide the obvious errors
 """
 
-
-#by output we have 4 cols of object i.e  cut, color, clarity, popularity
-print(df.groupby(["cut"]).count())#it gives "unknown"
-print(df.groupby(["popularity"]).count())  # it gives "NotAvail"
-
-
-
-# check for numerical value
-df.isin([0]).sum()
-#  as we know that x y z is length width and depth of diamond
-#   and by output its given zero but length width and depth cannot be zero
-
-
-
-
-
+def obvious_errors(dataset):
+    """The functions prints the uniques values for each column."""
+    pd.options.display.float_format = '{:,.2f}'.format
+    for colName in df.columns:
+        if  df[colName].dtype == 'object':
+            print("Unique values in",colName,"\n",df[colName].unique()) 
+oe=obvious_errors(df)
 
 #==============================================================================
 """
 8 . For each numeric column
 ▪ Replace null values with median value of the column .
 """
-#Q8
-print("========================================================================")
-for column in df.columns:
-    if df[column].dtype!=object:
-        if column!='id':
-            print("number of null vallues in column",column,":",
-                  df[column].isnull().sum())
-            df[column]=df[column].fillna(df[column].median())
-            print("number of null vallues in column",column," after replacing it with median:",df[column].isnull().sum())
-            print("------------------------------------------------------------")
 
+def replace_null(dataset):
+    """The function replace's the null values by median for all numeric 
+    columns"""
+    for column in df.columns:
+        if df[column].dtype!=object:
+            if column!='id':
+                print("number of null vallues in column",column,":",
+                      df[column].isnull().sum())
+                df[column]=df[column].fillna(df[column].median())
+                print("number of null vallues in column",column," after replacing it with median:",df[column].isnull().sum())
+                print("------------------------------------------------------------")
+rn=replace_null(df)
 
 #==============================================================================
 """
@@ -244,94 +230,94 @@ for column in df.columns:
 
 
 #==============================================================================
-#Q10
 """
 10. For each numeric column
 ▪ Provide the quartile summary along with the cout , mean & sum
 """
-print("Mean of all the numeric columns:")
-for column in df.columns:
-    if(df[column].dtype!=object):
-        print(column,":",df[column].mean())
-        
-print("Count of all the numeric columns:")
-for column in df.columns:
-    if(df[column].dtype!=object):
-        print(column,":",df[column].count())
-        
-print("Sum of all the numeric columns:")
-for column in df.columns:
-    if(df[column].dtype!=object):
-        print(column,":",df[column].sum())
-        
-print("The quartile summary of each column are:")
-df.quantile([0.25,0.50,0.75])
+def quartile_summary(dataset):
+    """The function returns the quartile summary along with count,mean 
+    and sum for all numeric columns"""
+    print("Mean of all the numeric columns:")
+    for column in dataset.columns:
+        if(dataset[column].dtype!=object):
+            print(column,":",dataset[column].mean())
+    print("-----------------------------------------") 
+    print("Count of all the numeric columns:")
+    for column in dataset.columns:
+        if(dataset[column].dtype!=object):
+            print(column,":",dataset[column].count())
+    print("-----------------------------------------")    
+    print("Sum of all the numeric columns:")
+    for column in dataset.columns:
+        if(dataset[column].dtype!=object):
+            print(column,":",dataset[column].sum())
+    print("-----------------------------------------")    
+    print("The quartile summary of each column are:")
+    print(dataset.quantile([0.25,0.50,0.75]))
+qs=quartile_summary(df)
 
 #==============================================================================
-#Q11
+
 """
 11. For each numeric column
 ▪ Provide the range, variance and standard deviation
 """
-print("variance of all the numeric columns:")
-for column in df.columns:
-    if(df[column].dtype!=object):
-        print(column,":",df[column].var())
-        
-print("======================================================================")
-print("Standard deviation of all the numeric columns:")
-for column in df.columns:
-    if(df[column].dtype!=object):
-        print(column,":",df[column].std())
-print("======================================================================")        
-for column in df.columns:
-    if(df[column].dtype!=object):
-        print("Maximum value of column",column,":",df[column].max())
-        print("Minimum value of column",column,":",df[column].min())
-        print("Range of column",column,":",df[column].max()-df[column].min())
-print("======================================================================") 
 
+def range_variance_sd(dataset):
+    """the function prints the Range,Variance and Standar deviatation for 
+    all numeric columns"""
+    print("variance of all the numeric columns:")
+    for column in df.columns:
+        if(df[column].dtype!=object):
+            print(column,":",df[column].var())       
+    print("----------------------------------------------------------------------")
+    print("Standard deviation of all the numeric columns:")
+    for column in df.columns:
+        if(df[column].dtype!=object):
+            print(column,":",df[column].std())
+    print("----------------------------------------------------------------------")        
+    for column in df.columns:
+        if(df[column].dtype!=object):
+            print("Maximum value of column",column,":",df[column].max())
+            print("Minimum value of column",column,":",df[column].min())
+            print("Range of column",column,":",df[column].max()-df[column].min())
+    print("----------------------------------------------------------------------") 
+rvs=range_variance_sd(df)
 
 
 #==============================================================================
-#Q12
+
 """
 12. For each numeric column
 ▪ Provide the count of outliers and their value
 """
-print("IQR of all the numeric columns:")
-for column in df.columns:
-    if(df[column].dtype!=object):
-        q1, q3= np.percentile(df[column],[25,75])
-        iqr = q3 - q1
-        lower_bound = q1 -(1.5 * iqr)
-        upper_bound = q3 +(1.5 * iqr)
-        print("Interquartile range of column",column,":",iqr)
-        print("Lower bound of column ",column,":",lower_bound)
-        print("Upper bound of column ",column,":",upper_bound)
-        outlier=[]
-        for i in (df[column]):
-          if lower_bound<i>upper_bound:
-               outlier.append(i)
-        print("Outliers are:",outlier)
-        if not outlier:
-          print("No Outlier Present")
-        print("---------------------------------------------------------------")
-             
-df.head()
-
-
+def outliers(dataset):
+    """The function prints the count of outlier and their values """
+    print("IQR of all the numeric columns:")
+    for column in dataset.columns:
+        if(dataset[column].dtype!=object):
+            q1, q3= np.percentile(dataset[column],[25,75])
+            iqr = q3 - q1
+            lower_bound = q1 -(1.5 * iqr)
+            upper_bound = q3 +(1.5 * iqr)
+            print("Interquartile range of column",column,":",iqr)
+            print("Lower bound of column ",column,":",lower_bound)
+            print("Upper bound of column ",column,":",upper_bound)
+            outlier=[]
+            for i in (dataset[column]):
+                if lower_bound<i>upper_bound:
+                    outlier.append(i)
+            print("Outliers are:",outlier)
+            if not outlier:
+                print("No Outlier Present")
+            print("--------------------------------------------------------------")
+ot=outliers(df)
 #=============================================================================
 """
 13. Are there any class or categoric variables? If yes ,
 ▪ provide frequency distribution table & chart for the same
 """
-cat=pd.Categorical(df["cut"],dtype="category")
-print(cat)
-plt.figure()
-plt.hist(cat)
-plt.show()
-df.head()
+
 
 #=============================================================================
 
@@ -339,12 +325,13 @@ df.head()
 14. For all numeric columns
 ▪ Provide histogram
 """
-
-plt.figure(figsize=(10,10))
-df.hist(sharey=True,align="mid")
-plt.tight_layout()
-plt.show()
-
+def histogram(dataset):
+    """The function returns the histogram for all numeric columns """
+    plt.figure(figsize=(10,10))
+    dataset.hist(sharey=True,align="mid")
+    plt.tight_layout()
+    return plt.show()
+ht=histogram(df)
 
 #==============================================================================
 
@@ -352,106 +339,50 @@ plt.show()
 15. For all numeric variables
 ▪ Provide box & whisker plot
 """
-plt.figure()
-sb.boxplot(data=df,orient="h")
-plt.show()
-
+def boxplot(dataset):
+    """The function returns the box and whisker plot for all numeric
+    columns  """
+    plt.figure()
+    sb.boxplot(data=dataset,orient="h")
+    return plt.show()
+bx=boxplot(df)
 
 #==============================================================================
 """
 16. For all numeric variables
 ▪ Provide correlation table & graph
 """
-corr=df.corr()
-print(corr)
-plt.figure()
-sb.heatmap(corr,vmax=1,annot=True,linecolor="black",linewidth=0.5)
-plt.show()
+def corrletion(dataset):
+    """The functions returns the correlation and graph for all numeric 
+    columns """
+    corr=dataset.corr()
+    print(corr)
+    plt.figure()
+    sb.heatmap(corr,vmax=1,annot=True,linecolor="black",linewidth=0.5)
+    return plt.show()
+cr=corrletion(df)
+
 #==============================================================================
 """
 17. Prepare relationship chart showing relation of each numeric
 column with all other numeric columns .
 """
-"""----------------------------------------------------------------------- """
-#final_try1
-g=nx.DiGraph(corr)
-plt.figure(figsize=(10,10))
-nx.draw(g,with_labels=True,node_size=500,font_size=40)
-plt.show()
-"""----------------------------------------------------------------------- """
-#final_try2
-g=nx.DiGraph(corr)
-plt.figure(figsize=(10,10))
-nx.draw_circular(g,with_labels=True,node_size=500,font_size=40)
-plt.show()
-
-"""----------------------------------------------------------------------- """
-plt.figure()
-sb.pairplot(df)
-plt.show()
-"""----------------------------------------------------------------------- """
-plt.figure()
-sb.clustermap(corr,annot=True)
-plt.show()
-
-#==============================================================================
+def relationship(dataset):
+    """The function returns the Relationship chart for all numerical values. """
+    plt.figure()
+    sb.pairplot(dataset)
+    return plt.show()
+rs=relationship(df)
 
 #==============================================================================
 """
 18. Find out the difference between the Actual Depth & Ideal Depth .
 """
-
-
-
-
-
-#rohit_code 
-print(df.head())
-# y = width
-#z = depth
-
-
-""" To find the depth percentage
- divide the diamond's physical depth measurement by its width.
- Also, depth is deemed acceptable within a certain range, 
- with any value between 56.5 and 65 percent considered good. However,
- the ideal depth is between 62.9 and 59.5 percent.)
-"""
-"""
-For a round diamond, an ideal depth percentage is between 59 and 62.6 
-percent This very nice 1.30-carat round cut, for example,
- has a depth of 61.8%
-"""
-
-Width_of_Diamond = df.iloc[:,10]
-print(Width_of_Diamond)
-Depth_of_Diamond = df.iloc[:,11]
-print(Depth_of_Diamond)
-
-
-percentage = (Depth_of_Diamond/Width_of_Diamond)*100
-print(percentage)
-
-
-
-list67 = []
-list69 = []
-for i in percentage:
-    if 56.5<= i <=65:
-        list67.append(i)
-for j in percentage:
-    if 59.5<= j <=62.9:
-        list69.append(j)
-#print(list67)
-#print(list69)
-
-TA = len(list67)
-TI = len(list69)
-hh = (TA/df.shape[0])*100
-print("Percentage of Actual is :",hh)
-tt = (TI/df.shape[0])*100
-print("Percentage of ideal is :",tt)
-
-
-
-
+def actual_ideal(dataset):
+    """The functions prints the difference between the actual depth and 
+    ideal depth"""
+    m=(np.mean(dataset.x)+np.mean(dataset.y))/2
+    dataset["ideal_depth"]=dataset.z/m
+    dataset["Difference"]=dataset["depth"]-dataset["ideal_depth"]
+    print(dataset["Difference"])
+ai=actual_ideal(df)
