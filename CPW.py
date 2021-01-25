@@ -25,35 +25,14 @@ Setting Maximum option for columns to see all the columns in outputs.
 pd.set_option("display.max_columns",None)
 
 #==============================================================================
-"""
-Taking input from user.
-Asking user to give loction of data file with extension.
-After getting location relpacing forslash to backward slash 
-"""
-
-#C:\Users\SIDDHESH\OneDrive\Desktop\R.J clg\Project_cyrussir\CPW\diamonds-m.csv
-path=input("Enter The Path of your dataset with extension:")
-path=path.replace("\\","/")
-#print(str(path))
-"""
-Applying conditions where data file with specific extension can be open 
-or print. 
-"""
-if path.endswith(".csv"):
-    df= pd.read_csv(path) 
-    print(df.head())
-elif path.endswith(".xlsx"):
-    df= pd.read_excel(path) 
-    print(df.head())
-elif path.endswith(".txt"):
-    df= pd.read(path) 
-    print(df.head())
-
-
  
 def UploadAction(event=None):
+    """The function takes the location from the user and prints the first five 
+    rows of the dataset.
+    """
     path = filedialog.askopenfilename()
     print('Selected:', path )
+    global df
     if path.endswith(".csv"):
         df= pd.read_csv(path) 
         print(df.head())
@@ -63,23 +42,17 @@ def UploadAction(event=None):
     elif path.endswith(".txt"):
         df= pd.read(path) 
         print(df.head())
-
+    #return df
 root = tk.Tk()
 button = tk.Button(root, text='Open', command=UploadAction)
 button.pack()
-
+root.after(5000, root.destroy)
 root.mainloop()
 
     
 #==============================================================================
-"""
-Reading Data
-read_csv() is the function in pandas which reads csv files.
-head() function is used to print first five rows of dataset.
-(default number of rows is 5)
-"""
-df= pd.read_csv ("diamonds-m.csv")
-df.head()
+#df= pd.read_csv ("diamonds-m.csv")
+#df.head()
 
 #==============================================================================
 """
@@ -179,14 +152,14 @@ def nullvalues(dataset):
     nl=dataset.isnull().sum()
     return nl
 null=nullvalues(df)
-print(null)    
+print("The number of null values in each column are",null)    
 
 def zerovalues(dataset):
     """The function returns the number of zeros in dataset  """
     ze=dataset.isin([0]).sum()
     return ze
 zero=zerovalues(df)
-print(zero)
+print("The numbers of zeros in each column are",zero)
 #==============================================================================
 
 """
