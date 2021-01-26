@@ -3,6 +3,11 @@
 Created on Tue Jan 12 12:59:54 2021
 
 @author: SIDDHESH
+"GROUP-G"
+Vikas bisoi-02
+Siddhesh kadam-09
+Pankaj Singh-34
+Jyoti Yadav-42
 """
 """
 Importing Libraries.
@@ -46,13 +51,7 @@ def UploadAction(event=None):
 root = tk.Tk()
 button = tk.Button(root, text='Open', command=UploadAction)
 button.pack()
-root.after(5000, root.destroy)
 root.mainloop()
-
-    
-#==============================================================================
-#df= pd.read_csv ("diamonds-m.csv")
-#df.head()
 
 #==============================================================================
 """
@@ -73,7 +72,7 @@ print("The Strucure of the dataset is:",shape)
 dtypes is the function in python which returns the data types of 
 all thr columns in the dataset.
 """
-#print(df.dtypes)
+
 
 def data_types(dataset):
     """The Functions returns the data type of the columns """
@@ -198,7 +197,10 @@ rn=replace_null(df)
 """
 9 . For each numeric column
 ▪ Replace zero values with suitable statistical value of the column . \
-    Give reason why
+    Give reason why 
+______________________________________________________________________________
+If we replace any value with zero,The summary of  dataset will be distributed.
+______________________________________________________________________________
 """
 
 
@@ -264,36 +266,50 @@ rvs=range_variance_sd(df)
 12. For each numeric column
 ▪ Provide the count of outliers and their value
 """
-def outliers(dataset):
-    """The function prints the count of outlier and their values """
-    print("IQR of all the numeric columns:")
-    for column in dataset.columns:
-        if(dataset[column].dtype!=object):
-            q1, q3= np.percentile(dataset[column],[25,75])
+print("count of outliers and their value for each numeric column")
+print("================================================================================")
+for column in df.columns:
+    if(df[column].dtype!=object):
+        if(column!='id'):
+            q1, q3= np.percentile(df[column],[25,75])
             iqr = q3 - q1
-            lower_bound = q1 -(1.5 * iqr)
-            upper_bound = q3 +(1.5 * iqr)
+            lower_bound = q1 -(1.5 * iqr) 
+            upper_bound = q3 +(1.5 * iqr) 
             print("Interquartile range of column",column,":",iqr)
             print("Lower bound of column ",column,":",lower_bound)
-            print("Upper bound of column ",column,":",upper_bound)
+            print("Upper bound of column ",column,";",upper_bound)
+            print("----------------------------------------------------------")
             outlier=[]
-            for i in (dataset[column]):
-                if lower_bound<i>upper_bound:
-                    outlier.append(i)
+            for i in (df[column]):
+              if lower_bound>i:
+                   outlier.append(i)
+              if upper_bound<i:
+                   outlier.append(i)
             print("Outliers are:",outlier)
+            print("Number of outliers in column",column,"are:",len(outlier))
+            
             if not outlier:
-                print("No Outlier Present")
-            print("--------------------------------------------------------------")
-ot=outliers(df)
+              print("No Outlier Present")
+            print("----------------------------------------------------------")
 #=============================================================================
 """
 13. Are there any class or categoric variables? If yes ,
 ▪ provide frequency distribution table & chart for the same
 """
+column_name= []
+for column in list (df.columns):
+    if df[column].dtype == 'object':
+        column_name.append(column)
+        print(column)
+df_new= df[column_name]
+print(df_new.head())
+for i in df_new:
+    plt.figure(figsize=(20,10))
+    df_new.loc[:,i].hist()
+    plt.show()
 
 
 #=============================================================================
-
 """
 14. For all numeric columns
 ▪ Provide histogram
